@@ -4,15 +4,12 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
+import * as fromBooks from './books';
+
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule
-  ],
+  declarations: [AppComponent, ...fromBooks.components],
+  imports: [BrowserModule, FormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,0 +1,14 @@
+.ng-valid[required],
+.ng-valid.required {
+  border: 2px solid #42a948; /* green */
+}
+
+.ng-invalid:not(form).ng-touched,
+.ng-invalid:not(form).ng-dirty {
+  border: 2px solid #a94442; /* red */
+  background-color: rgb(250, 255, 189);
+}
+
+input.ng-invalid.ng-touched:focus {
+  border: 2px solid orange;
+}
