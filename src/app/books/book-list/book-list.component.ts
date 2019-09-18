@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { BOOKS } from '../../data/book-data';
 import { Book } from '../../models/book';
+import { BookService } from '../../services';
 
 @Component({
   selector: 'app-book-list',
@@ -10,11 +11,15 @@ import { Book } from '../../models/book';
 })
 export class BookListComponent implements OnInit {
   selectedBook: Book;
-  books: Book[] = BOOKS;
+  books: Book[] = [];
 
-  constructor() {}
+  constructor(private readonly bookService: BookService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.bookService.getBooks().subscribe(books => {
+      this.books = books;
+    });
+  }
 
   onSelect(book: Book) {
     console.log('selecting book');
@@ -29,7 +34,18 @@ export class BookListComponent implements OnInit {
 
   onCreate(book: Book) {
     console.log('creating book', book);
+    this.bookService.createBook(book).subscribe(createdBook => {
+      // this.books.push(createdBook);
+      // console.log('created', createdBook);
+      this.books = [...this.books, createdBook];
+    });
+  }
 
-    this.books.push(book);
+  onDelete(id: number) {
+    this.bookService.removeBook(id).subscribe(deletedBook => {
+      console.log('deleted book', deletedBook);
+
+      this.books = this.books.filter(book => book.id !== deletedBook.id);
+    });
   }
 }
