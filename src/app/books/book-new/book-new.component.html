@@ -7,27 +7,54 @@
         <label for="">Title</label>
         <input
           type="text"
+          class="form-control"
+          id="title"
           name="title"
           [(ngModel)]="book.title"
+          #title="ngModel"
+          placeholder="title"
+          minlength="3"
           required
-          class="form-control"
         />
+        <div *ngIf="(title.touched || title.dirty) && title.errors">
+          <div *ngIf="title?.errors?.required" class="alert alert-danger">
+            You must enter a book title!
+          </div>
+          <div *ngIf="title?.errors?.minlength" class="alert alert-danger">
+            Title must be at least
+            {{ title?.errors?.minlength.requiredLength }} characters
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label for="">Author</label>
         <input
           type="text"
+          class="form-control"
+          id="author"
           name="author"
           [(ngModel)]="book.author"
+          #author="ngModel"
+          placeholder="author"
+          minlength="3"
           required
-          class="form-control"
         />
+        <div *ngIf="(author.touched || author.dirty) && author.errors">
+          <div *ngIf="author?.errors?.required" class="alert alert-danger">
+            You must enter a book author!
+          </div>
+          <div *ngIf="author?.errors?.minlength" class="alert alert-danger">
+            Author must be at least
+            {{ author?.errors?.minlength.requiredLength }} characters
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label for="">Pages</label>
         <input
           type="number"
           name="pages"
+          placeholder="pages"
           [(ngModel)]="book.pages"
           class="form-control"
         />
@@ -36,9 +63,12 @@
         <label for="">Year</label>
         <input
           type="number"
-          name="year"
-          [(ngModel)]="book.year"
           class="form-control"
+          name="year"
+          id="year"
+          [(ngModel)]="book.year"
+          #year="ngModel"
+          placeholder="year"
         />
       </div>
       <div class="form-group">
@@ -46,6 +76,7 @@
         <input
           type="text"
           name="publisher"
+          placeholder="publisher"
           [(ngModel)]="book.publisher"
           class="form-control"
         />
