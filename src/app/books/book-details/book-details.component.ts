@@ -14,6 +14,8 @@ export class BookDetailsComponent implements OnInit {
   @Input()
   book: Book;
 
+  errorMessage: string;
+
   constructor(
     private readonly bookService: BookService,
     private readonly route: ActivatedRoute
@@ -25,9 +27,19 @@ export class BookDetailsComponent implements OnInit {
         map(params => params.get('book_id')),
         switchMap(id => this.bookService.getBook(id))
       )
-      .subscribe(book => {
-        console.log('got book', book);
-        this.book = book;
+      .subscribe({
+        next: book => {
+          console.log('got book', book);
+          this.book = book;
+        },
+        error: error => {
+          console.log('error', error);
+
+          this.errorMessage =
+            error.status === 404
+              ? 'The requested book was not found!'
+              : 'An error occured while retrieving your book';
+        },
       });
 
     // this.route.paramMap.subscribe(params => {

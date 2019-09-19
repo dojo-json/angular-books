@@ -3,6 +3,7 @@
     <legend>Books</legend>
     {{ bookForm.value | json }}
     <form (submit)="onSubmit($event, bookForm)" #bookForm="ngForm">
+      <input type="hidden" name="_id" [ngModel]="book?._id" />
       <div class="form-group">
         <label for="title">Title</label>
         <input
@@ -10,7 +11,7 @@
           class="form-control"
           id="title"
           name="title"
-          [(ngModel)]="book.title"
+          [ngModel]="book?.title"
           #title="ngModel"
           placeholder="title"
           minlength="3"
@@ -33,7 +34,7 @@
           class="form-control"
           id="author"
           name="author"
-          [(ngModel)]="book.author"
+          [ngModel]="book?.author"
           #author="ngModel"
           placeholder="author"
           minlength="3"
@@ -56,7 +57,7 @@
           name="pages"
           id="pages"
           placeholder="pages"
-          [(ngModel)]="book.pages"
+          [ngModel]="book?.pages"
           class="form-control"
         />
       </div>
@@ -67,7 +68,7 @@
           class="form-control"
           name="year"
           id="year"
-          [(ngModel)]="book.year"
+          [ngModel]="book?.year"
           #year="ngModel"
           placeholder="year"
         />
@@ -79,12 +80,12 @@
           name="publisher"
           id="publisher"
           placeholder="publisher"
-          [(ngModel)]="book.publisher"
+          [ngModel]="book?.publisher"
           class="form-control"
         />
       </div>
 
-      <button *ngIf="bookForm.valid">Submit</button>
+      <button *ngIf="bookForm.valid && !bookForm.submitted">Update</button>
     </form>
   </fieldset>
 </section>

@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntil, map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 import { BOOKS } from '../../data/book-data';
 import { Book } from '../../models/book';
@@ -9,16 +12,29 @@ import { BookService } from '../../services';
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css'],
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   selectedBook: Book;
   books: Book[] = [];
 
-  constructor(private readonly bookService: BookService) {}
+  constructor(
+    private readonly bookService: BookService,
+    private readonly route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.bookService.getBooks().subscribe(books => {
-      this.books = books;
-    });
+    // this retrieves the resolved data
+    this.route.data
+      .pipe(
+        map(({ books }: { books: Book[] }) => books),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(books => {
+        this.books = books;
+      });
+    // this.bookService.getBooks().subscribe(books => {
+    //   this.books = books;
+    // });
   }
 
   onSelect(book: Book) {
@@ -34,18 +50,29 @@ export class BookListComponent implements OnInit {
 
   onCreate(book: Book) {
     console.log('creating book', book);
-    this.bookService.createBook(book).subscribe(createdBook => {
-      // this.books.push(createdBook);
-      // console.log('created', createdBook);
-      this.books = [...this.books, createdBook];
-    });
+    this.bookService
+      .createBook(book)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(createdBook => {
+        // this.books.push(createdBook);
+        // console.log('created', createdBook);
+        this.books = [...this.books, createdBook];
+      });
   }
 
-  onDelete(id: number) {
-    this.bookService.removeBook(id).subscribe(deletedBook => {
-      console.log('deleted book', deletedBook);
+  onDelete(id: string) {
+    this.bookService
+      .removeBook(id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(deletedBook => {
+        console.log('deleted book', deletedBook);
 
-      this.books = this.books.filter(book => book.id !== deletedBook.id);
-    });
+        this.books = this.books.filter(book => book._id !== deletedBook._id);
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

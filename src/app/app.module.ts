@@ -3,16 +3,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
-import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+import { NavComponent } from './nav/nav.component';
+import { BookResolver } from './resolvers';
 
 import * as fromBooks from './books';
-import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   declarations: [AppComponent, ...fromBooks.components, NavComponent],
   imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
-  providers: [],
+  providers: [BookResolver],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

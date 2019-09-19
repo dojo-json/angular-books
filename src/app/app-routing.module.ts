@@ -2,6 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { environment } from '../environments/environment';
+import { BookResolver } from './resolvers';
 import * as fromBooks from './books';
 
 const enableTracing = false && !environment.production;
@@ -18,6 +19,7 @@ const routes: Routes = [
       {
         path: '',
         component: fromBooks.BookListComponent,
+        resolve: { books: BookResolver },
       },
       {
         path: 'new',
@@ -26,6 +28,10 @@ const routes: Routes = [
       {
         path: ':book_id',
         component: fromBooks.BookDetailsComponent,
+      },
+      {
+        path: ':book_id/edit',
+        component: fromBooks.BookEditComponent,
       },
     ],
   },
